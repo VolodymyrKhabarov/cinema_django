@@ -3,31 +3,42 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+<main class="form-auth form-signin w-100 m-auto">
+    <div class="container mt-4">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
 
-<form action="" method="post">
-    {% csrf_token %}
-    <h1>Please sign up</h1>
-    <div>
-        <label for="{{ form.username.id_for_label }}">Username:</label>
-        {{ form.username }}
-    </div>
-    <div>
-        <label for="{{ form.email.id_for_label }}">Email:</label>
-        {{ form.email }}
-    </div>
-    <div>
-        <label for="{{ form.password.id_for_label }}">Password:</label>
-        {{ form.password1 }}
-    </div>
-    <div>
-        <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
-        {{ form.password2 }}
-    </div>
-    <div>
-        <p>Have account?</p>
-        <a href="{% url "login" %}">Sign in now</a>
-    </div>
-    <button type="submit">Sign up</button>
-</form>
+                            {% for field in form %}
+                            <div class="mb-3">
 
+                                {% if field.errors %}
+                                <ul>
+                                    {% for error in field.errors %}
+                                    <li><em>{{ error|escape }}</em></li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            </div>
+                            {% endfor %}
+
+                            <div class="my-3">
+                                <p>Have already an account?</p>
+                                <a href="{% url "login" %}" class="text-body fw-bold">Sign in here</a>
+                            </div>
+                            <button type="submit" class="btn btn-primary my-2 my-sm-0">Sign up</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 {% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %} My info {% endblock %}
+
+{% block content %}
+
+<h1>Your personal data</h1>
+
+<p>Login:</p>
+<p>{{ user.username }}</p>
+
+<p>Email:</p>
+<p>{{ user.email }}</p>
+
+<p>Balance:</p>
+<p>{{ user.wallet }} UAH</p>
+
+{% endblock %}

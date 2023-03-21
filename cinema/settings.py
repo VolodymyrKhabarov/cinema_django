@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from django.urls import reverse_lazy
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,6 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+    'rest_framework.authtoken',
+    'django_filters',
+    'tempus_dominus',
+    'debug_toolbar',
+
     'api',
     'users',
 ]
@@ -50,6 +58,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'users.middlewares.AutoLogoutMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'cinema.urls'
@@ -57,7 +68,7 @@ ROOT_URLCONF = 'cinema.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -102,13 +113,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Authentication
+AUTH_USER_MODEL = "users.User"
+
+# Login
+LOGIN_URL = "signin/"
+LOGIN_REDIRECT_URL = reverse_lazy('profile')
+LOGOUT_REDIRECT_URL = reverse_lazy('login')
+
+# Auto logout
+AUTO_LOGOUT_DELAY = 60 # 1 minute (in seconds)
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Kiev'
 
 USE_I18N = True
 
@@ -119,8 +140,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / "assets"]
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+MEDIA_URL = '/assets/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'assets/media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+        'api.permissions.AuthorOnlyPermission',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]

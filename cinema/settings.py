@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from django.urls import reverse_lazy
 from pathlib import Path
+import datetime
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -123,6 +124,7 @@ LOGOUT_REDIRECT_URL = reverse_lazy('login')
 
 # Auto logout
 AUTO_LOGOUT_DELAY = 60 # 1 minute (in seconds)
+DRF_AUTH_TOKEN_EXPIRATION_TIME = datetime.timedelta(seconds=60)
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -147,16 +149,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'assets/media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Django REST framework settings
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-        'api.permissions.AuthorOnlyPermission',
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    ],
+        'api.authentication.TokenWithLifeTimeAuthentication',
+    )
 }
 
 INTERNAL_IPS = [

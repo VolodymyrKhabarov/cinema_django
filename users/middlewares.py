@@ -5,32 +5,35 @@ current time and, if the elapsed time is greater than the specified AUTO_LOGOUT_
 settings.py, it logs the user out and redirects them to the login page.
 """
 
+from datetime import datetime, timedelta
 from django.conf import settings
 from django.contrib.auth import logout
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.contrib.sessions.middleware import SessionMiddleware
+from django.core.cache import cache
 from django.utils import timezone
+from django.utils.deprecation import MiddlewareMixin
 
 
-class AutoLogoutMiddleware:
+class AutoLogoutMiddleware(MiddlewareMixin):
     """
-    Middleware that logs out a user (not an admin) if no requests have been received for a minute.
+    Middleware class for automatic user logout after a certain amount of inactivity.
     """
 
-    def __init__(self, get_response):
-        self.get_response = get_response
+    def process_request(self, request):
+        """
+        Checks if the user is authenticated and not a staff member. If the user
+        is authenticated and the last request time is greater than the allowed
+        inactivity period, logs out the user.
 
-    def __call__(self, request):
-        response = self.get_response(request)
+        Args:
+            request (HttpRequest): The current HTTP request object.
 
-        if request.user.is_authenticated and not request.user.is_superuser:
-            current_time = timezone.now()
-            if (current_time - request.user.last_login).total_seconds() < settings.AUTO_LOGOUT_DELAY:
-                request.user.last_activity = current_time
-            else:
-                logout(request)
-                return HttpResponseRedirect(reverse('login'))
-
-            request.user.save()
-
-        return response
+        Returns:
+            None
+        """
+        if request.user.is_authenticated and not request.user.is_staff:
+            last_activity = cache.get('last_request')
+            if last_activity:
+                if timezone.now() > (last_activity + settings.AUTO_LOGOUT_DELAY):
+                    logout(request)
+            cache.set('last_request', timezone.now())

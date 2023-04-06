@@ -5,6 +5,7 @@ This module contains views for handling user signup and profile pages.
 """
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, TemplateView
 from django.urls import reverse_lazy
 
@@ -49,7 +50,7 @@ class SignUpView(CreateView):
         return super().form_valid(form)
 
 
-class ProfileView(TemplateView):
+class ProfileView(LoginRequiredMixin, TemplateView):
     """
     View for user profile page.
 
@@ -60,3 +61,5 @@ class ProfileView(TemplateView):
     """
 
     template_name = 'registration/profile.html'
+    login_url = 'login'
+    redirect_field_name = 'next'

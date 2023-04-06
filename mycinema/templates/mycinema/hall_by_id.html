@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ hall_id }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="title">{{ hall.name }} Hall</h1>
+    <div>Rows: {{ hall.row }}</div>
+    <div>Seats in a row: {{ hall.seat }}</div>
+    <div>Total seats: {{ hall.total_seats }}</div>
+
+    <div>
+        <p class="screen d-flex justify-content-center">
+            <img class="border-0" src="{% static 'media/screen.svg' %}" alt="screen">
+        <p class="d-flex justify-content-center"><b>Screen</b></p>
+        </p>
+        <div class="seats">
+            <table>
+                {% for row in rows %}
+                <tr>
+                    {% for seat in seats %}
+                    <td headers="row-{{ row }} col-{{ seat }}" scope="col">
+                        <span class="badge bg-secondary text-white">{{ seat }}
+                        </span>
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

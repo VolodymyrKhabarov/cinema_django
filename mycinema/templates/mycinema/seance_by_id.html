@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+{{ seance_id }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            {% if seance.film.image %}
+            <img src="{{ seance.film.image.url }}" alt="Film" class="img-fluid mx-auto custom-img-size">
+            {% else %}
+            <img src="{{ '/static/media/noimage.svg' }}" alt="No image" class="img-fluid mx-auto custom-img-size">
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <ul class="list-group custom-list">
+                <li>
+                    <a class="title" href="{% url 'film_by_id' seance.film.id %}">
+                        <h2>{{ seance.film.title }}</h2>
+                    </a>
+                    <h6 class="date">{{ seance.start_time|date:"d.m H:i" }} -
+                        {{ seance.finish_time|date:"d.m H:i" }}</h6>
+                    <p id="hall"><h5>{{ seance.hall }} hall</h5></p>
+                    <p class="lab1">
+                        <b id="free_seats">{{ seance.seats }}</b> seats left
+                    </p>
+                    <p class="lab1">
+                        Price <b>{{ seance.price }}</b> UAH
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <p class="screen d-flex justify-content-center">
+        <img class="border-0" src="{% static 'media/screen.svg' %}" alt="screen">
+    <p class="d-flex justify-content-center"><b>Screen</b></p>
+    </p>
+
+    <form action="" class="hall-form" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="seance_id" value="{{ seance.id }}">
+        <div>
+            {% if seance.seats == 0 %}
+            <p class="text-center text-danger">Sold out</p>
+            {% else %}
+            <table>
+                {% for row in seance.row_list %}
+                <tr>
+                    {% for seat in seance.seat_list %}
+                    <td>
+
+                        <input type="checkbox" class="seat" id="seat-{{ row }}-{{ seat }}"
+                               name="seat-{{ row }}-{{ seat }}" {% for ticket in tickets %}
+                               {% if ticket.row == row and ticket.seat == seat %}disabled=""
+                               {% endif %}{% endfor %}/>
+                        <span id="seat-wrap" class="badge badge-info">
+                            <label class="lab" for="seat-{{ row }}-{{ seat }}"
+                                   title="Row {{ row }}, seat {{ seat }}">{{ seat }}</label>
+                        </span>
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+
+            {% if user.is_authenticated and not user.is_superuser %}
+            {% if seance.seats == 0 %}
+            {% else %}
+            <div class="d-flex justify-content-center mb-3 btn-seance">
+                <button class="btn btn-info">Buy</button>
+            </div>
+            {% endif %}
+            {% endif %}
+
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
     'api',
     'users',
+    'mycinema',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +62,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'users.middlewares.AutoLogoutMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'mycinema.middlewares.SeanceNotEditable',
+    'mycinema.middlewares.HallEditableMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'cinema.urls'
@@ -118,12 +121,12 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = "users.User"
 
 # Login
-LOGIN_URL = "signin/"
-LOGIN_REDIRECT_URL = reverse_lazy('profile')
-LOGOUT_REDIRECT_URL = reverse_lazy('login')
+LOGIN_URL = "login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 # Auto logout
-AUTO_LOGOUT_DELAY = 60 # 1 minute (in seconds)
+AUTO_LOGOUT_DELAY = datetime.timedelta(minutes=1)
 DRF_AUTH_TOKEN_EXPIRATION_TIME = datetime.timedelta(seconds=60)
 
 # Internationalization

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Seances{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    {% if seance_list %}
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="navbarDropdownMenuLink"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            Sort by {{ choice }}
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="{% url 'seances_sorted' 1 %}">Price: low to high</a></li>
+            <li><a class="dropdown-item" href="{% url 'seances_sorted' 2 %}">Price: high to low</a></li>
+            <li><a class="dropdown-item" href="{% url 'seances_sorted' 3 %}">Beginning: low to high</a></li>
+            <li><a class="dropdown-item" href="{% url 'seances_sorted' 4 %}">Beginning: high to low</a></li>
+
+        </ul>
+    </div>
+    <div class="row mt-4">
+        {% for seance in seance_list %}
+        <div class="col-sm-6 col-md-3 mb-4">
+            <div class="card mx-2 bg-light">
+
+                {% if seance.film.image_title %}
+                <img class="card-img-top" src="{{seance.film.image_title.url}}" alt="">
+                {% else %}
+                <img class="card-img-top" src="{% static 'media/noimage.svg' %}" alt="No image">
+                {% endif %}
+
+                <div class="card-body">
+                    <a href="{% url 'seance_by_id' seance.id %}">
+                        <h3 class="card-title mt-2 ml-2">{{ seance.film.title }}</h3>
+                    </a>
+                    <p class="card-text mb-2 ml-2">Beginning: {{ seance.start_time|date:"d/m H:i" }}</p>
+                    <p class="card-text mb-2 ml-2">End: {{ seance.finish_time|date:"d/m H:i" }}</p>
+                    <p class="card-text mb-2 ml-2">{{ seance.hall }} hall </p>
+                    <p class="card-text mb-2 ml-2">{{ seance.seats }} seats free</p>
+                    <p class="card-text mb-2 ml-2">{{ seance.price }} UAH</p>
+                    {% if user.is_superuser %}
+                    {% if seance.is_editable == True %}
+                    <a class="btn btn-primary" href="{% url 'edit_seance' seance.id %}">Edit</a>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h1>No seances added yet. Please check back later.</h1>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,5 +1,6 @@
 """
-This module contains custom authentication classes for the 'api' app in this Django project.
+This module defines a custom token authentication class with token expiration functionality.
+
 """
 
 from django.utils import timezone
@@ -27,6 +28,7 @@ class TokenWithLifeTimeAuthentication(TokenAuthentication):
             the user and token if successful. Otherwise, raises an `AuthenticationFailed`
             exception with an appropriate error message.
     """
+
     def authenticate_credentials(self, key):
         """
         Authenticate the provided token key and return the user and token if successful.
@@ -44,6 +46,11 @@ class TokenWithLifeTimeAuthentication(TokenAuthentication):
         """
         user, token = super().authenticate_credentials(key=key)
 
+        # Check if the user is an admin
+        if user.is_staff:
+            return user, token
+
+        # Check if the token has expired
         if (token.created + DRF_AUTH_TOKEN_EXPIRATION_TIME) < timezone.now():
             token.delete()
             raise exceptions.AuthenticationFailed("Token expired")

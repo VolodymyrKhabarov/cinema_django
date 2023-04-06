@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Films{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    {% if not film_list %}
+    <h1>Sorry, no films on this day :(</h1>
+    {% else %}
+    <div class="row row-cols-1 row-cols-md-2">
+        {% for film in film_list %}
+        <div class="col mb-4">
+            <div class="card mb-3 bg-light">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        {% if film.image_title %}
+                        <a href="{% url 'film_by_id' film.id %}">
+                            <img class="card-img" src="{{film.image_title.url}}" alt="{{film.title}}">
+                        </a>
+                        {% else %}
+                        <div class="card-img-top bg-secondary text-light d-flex justify-content-center
+                        align-items-center">
+                            <img class="card-img-top" src="{% static 'media/noimage.svg' %}" alt="No image">
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                <a href="{% url 'film_by_id' film.id %}">{{ film.title }}</a>
+                            </h3>
+                            <p>{{ view_date|date:"d.m.y" }}</p>
+                            <ul class="list-group">
+                                <div class="row">
+                                    {% for seance in seances %}
+                                    {% if seance.film == film %}
+                                    <div class="col col-md-6 d-flex justify-content-center">
+
+                                        <li class="list-group-item seance-item border-0 bg-light">
+                                            {% if today|date:"H:i" > seance.start_time|date:"H:i" %}
+                                            {% if not delta %}
+                                            <a class="btn btn-outline-info disabled mb-3" role="button"
+                                               aria-disabled="true">
+                                                {% else %}
+                                                <a class="btn btn-info mb-2" href="{% url 'seance_by_id' seance.id %}">
+                                                    {% endif %}
+                                                    {% else %}
+                                                    <a class="btn btn-info mb-2"
+                                                       href="{% url 'seance_by_id' seance.id %}" title="Buy">
+                                                        {% endif %}
+
+                                                        <span>{{ seance.start_time|date:"H:i" }} -
+                                                            {{ seance.finish_time|date:"H:i" }}</span>
+                                                        <br>
+                                                        <span>{{ seance.hall }} hall</span>
+                                                        <br>
+                                                        <span>{{ seance.seats }} seats free</span>
+                                                        <br>
+                                                        <small><span>{{ seance.price }} uah</span></small>
+                                                    </a></a></a>
+                                        </li>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

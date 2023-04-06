@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ ticket_id }}{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    {% if ticket_list %}
+
+    <h5>Your tickets</h5>
+
+    {% for seance in seance_list %}
+        <div class="card mb-3">
+            <div class="row g-0">
+                <div class="col-md-4 d-flex align-items-center">
+                    {% if seance.film.image %}
+                        <img src="{{seance.film.image.url}}" alt="{{ seance.film }}"
+                             class="img-fluid rounded-start object-fit-cover object-fit-md-none img-ticket"
+                             style="width:100%; aspect-ratio:16/9;">
+                    {% else %}
+                        <div class="p-3"><img src="{% static 'media/noimage.svg' %}" alt="No image"></div>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <a class="title" href="{% url 'seance_by_id' seance.id %}">
+                            <h2 class="card-title">{{ seance.film }}</h2>
+                        </a>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ seance.start_time|date:"d.m.y H:i" }}</h6>
+                        <div class="card-text">
+                            <h6>
+                            {% for ticket in ticket_list %}
+                                {% if seance == ticket.seance %}
+                                    {% if user == ticket.user or user.is_superuser %}
+                                        <a class="badge badge-info"
+                                           href="{% url 'ticket_by_id' ticket.id %}">
+                                            {{ ticket.row }}/{{ ticket.seat }}
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <h1>No tickets</h1>
+{% endif %}
+    </div>
+{% endblock %}

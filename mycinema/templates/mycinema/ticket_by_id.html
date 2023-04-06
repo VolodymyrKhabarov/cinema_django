@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ ticket_id }}{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-4">
+    <div class="card">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                {% if ticket.seance.film.image %}
+                <img class="card-img" src="{{ticket.seance.film.image.url}}" alt="{{ ticket.seance.film }}">
+                {% else %}
+                <img class="card-img" src="{% static 'media/noimage.svg' %}" alt="No image">
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <h1 class="card-title">{{ ticket.seance.film }}</h1>
+                <div class="card-body">
+                    <p class="card-text">Beginning: {{ ticket.seance.start_time|date:"d.m.y H:i" }}</p>
+                    <p class="card-text">Price: {{ ticket.seance.price }} UAH</p>
+                    <p class="card-text">Row: {{ ticket.row }} / Seat: {{ ticket.seat }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

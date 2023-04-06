@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}New Film{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col">
+            <form method="post" autocomplete="off" action="" enctype='multipart/form-data'>
+                {% csrf_token %}
+                <fieldset>
+                    <legend>Add new film</legend>
+                    {{ form.as_p }}
+                    <button class="btn btn-info">Save</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

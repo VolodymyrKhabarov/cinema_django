@@ -12,4 +12,4 @@ class UserAdmin(admin.ModelAdmin):
     """
     A Django ModelAdmin class that provides custom behavior for the User model in the admin interface
     """
-    list_display = ('username', 'email', 'last_activity')
+    pass

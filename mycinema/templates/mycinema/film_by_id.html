@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ film.title }}{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card">
+                {% if film.image_title %}
+                <img src="{{ film.image.url }}" alt="{{ film.title }}" class="card-img-top img-fluid">
+                {% else %}
+                <img src="{{ '/static/media/noimage.svg' }}" alt="No image" class="card-img-top img-fluid">
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h1 class="display-4">{{ film.title }}</h1>
+            <p class="lead">Release date: {{ film.release_date|date:"d.m.y" }}</p>
+            {% if film.earliest_seance %}
+            {% if film.latest_seance %}
+            <p class="lead">Date of seances: {{ film.earliest_seance.start_time|date:"d.m.Y" }} -
+                {{ film.latest_seance.start_time|date:"d.m.Y" }}</p>
+            {% else %}
+            <p class="lead">Dates of seances will be announced later.</p>
+            {% endif %}
+            {% else %}
+            <p class="lead">Dates of seances will be announced later.</p>
+            {% endif %}
+            <p class="lead">Duration: {{ film.film_duration }}</p>
+            {% if film.description %}
+            <p class="lead">Description: {{ film.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

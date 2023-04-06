@@ -1,10 +1,15 @@
 asgiref==3.6.0
+beautifulsoup4==4.12.0
 Django==4.1.7
+django-bootstrap4==22.3
 django-filter==22.1
 django-tempus-dominus==5.1.2.17
 django_debug_toolbar==3.8.1
 djangorestframework==3.14.0
 Pillow==9.4.0
+python-dateutil==2.8.2
 pytz==2022.7.1
+six==1.16.0
+soupsieve==2.4
 sqlparse==0.4.3
 tzdata==2022.7

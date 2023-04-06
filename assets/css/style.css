@@ -1,0 +1,188 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+img {
+    border-radius: 5px;
+    border: 2px solid #415771;
+}
+
+small {
+    font-size: 10px;
+}
+
+table {
+    margin: auto;
+    margin-top: 30px;
+}
+
+#seat-wrap {
+    background-color: #B4A0AC;
+    width: 20px;
+}
+
+#seat-wrap:hover {
+    border: 1.5px solid #40698E;
+}
+
+.lab {
+    cursor: pointer;
+    opacity: 0;
+}
+
+input[disabled]~#seat-wrap {
+    background-color: #6DB2C8;
+    color: #6DB2C8;
+}
+
+input[type=checkbox]:checked~#seat-wrap {
+    background-color: #40698E;
+}
+
+h2,
+h3,
+h6 {
+    color: #6DB2C8;
+}
+
+h1,
+h4,
+h5 {
+    color: #415771;
+}
+
+.btn.btn-outline-info {
+    color: #6DB2C8;
+    border: 1px solid #6DB2C8;
+}
+
+.btn.btn-outline-info:hover {
+    color: white;
+}
+
+.badge.badge-info {
+    background-color: #6DB2C8
+}
+
+.badge {
+    color: black;
+    margin: 0 2px 2px 0;
+}
+
+.btn.btn-info {
+    background-color: #6DB2C8;
+    border: 1px solid #6DB2C8;
+}
+
+.btn.btn-info:hover {
+    background-color: white;
+    border: 1px solid #6DB2C8;
+    color: #6DB2C8;
+}
+
+.dropdown-item {
+    color: #6DB2C8;
+}
+
+.dropdown-item:hover {
+    background-color: #6DB2C8;
+    color: white;
+}
+
+.title {
+    color: #6DB2C8;
+}
+
+a.title:hover {
+    color: #6DB2C8;
+}
+
+.date {
+    color: #415771;
+}
+
+ul.list-group {
+    list-style: none;
+}
+
+li.list-group-item {
+    padding: 0px;
+}
+
+ul li {
+    margin-top: 0px;
+}
+
+.lab1 {
+    color: #415771;
+}
+
+#hall {
+    width: 90px;
+    color: #B4A0AC;
+    border-radius: 5px;
+    padding: 1%;
+    margin-left: 0px;
+}
+
+.custom-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.custom-list .list-group-item {
+    border-radius: 0;
+    margin-bottom: 10px;
+}
+
+input[type=checkbox].seat {
+    position: absolute;
+    opacity: 0;
+    width: 20px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.screen {
+    margin-top: 30px;
+}
+
+.btn-seance {
+    margin-top: 20px;
+}
+
+img.img-ticket {
+    width: 100%;
+    aspect-ratio: 16/9;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.container {
+    min-height: 100%;
+    padding-bottom: 60px;
+    position: relative;
+}
+
+.card {
+    height: 100%;
+}

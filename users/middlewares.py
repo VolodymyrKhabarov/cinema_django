@@ -13,6 +13,8 @@ from django.core.cache import cache
 from django.utils import timezone
 from django.utils.deprecation import MiddlewareMixin
 
+from users.models import UserActivity
+
 
 class AutoLogoutMiddleware(MiddlewareMixin):
     """
@@ -32,8 +34,9 @@ class AutoLogoutMiddleware(MiddlewareMixin):
             None
         """
         if request.user.is_authenticated and not request.user.is_staff:
-            last_activity = cache.get('last_request')
-            if last_activity:
-                if timezone.now() > (last_activity + settings.AUTO_LOGOUT_DELAY):
+            user_activity, created = UserActivity.objects.get_or_create(user=request.user)
+            if not created:
+                if timezone.now() > (user_activity.last_activity + settings.AUTO_LOGOUT_DELAY):
                     logout(request)
-            cache.set('last_request', timezone.now())
+            user_activity.last_activity = timezone.now()
+            user_activity.save()

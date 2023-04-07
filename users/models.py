@@ -6,6 +6,7 @@ AbstractUser model and adds additional fields like last_activity and wallet.
 """
 
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
 from mycinema.models import Ticket
@@ -47,3 +48,11 @@ class User(AbstractUser):
             str: The username of the user object.
         """
         return f"{self.username}"
+
+
+class UserActivity(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    last_activity = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username}"

@@ -51,6 +51,16 @@ class User(AbstractUser):
 
 
 class UserActivity(models.Model):
+    """
+    The UserActivity model represents the last activity of a user. It has two fields: user,
+    which is a foreign key to the user model, and last_activity, which is a date and time field
+    that automatically updates with the current date and time each time the model is saved.
+    The __str__ method returns the username of the user associated with the model.
+
+    This model can be used to track the last activity of users in an application, such as the last
+    time they logged in or the last time they performed a specific action.
+    """
+    
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     last_activity = models.DateTimeField(auto_now=True)
 

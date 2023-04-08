@@ -60,7 +60,7 @@ class UserActivity(models.Model):
     This model can be used to track the last activity of users in an application, such as the last
     time they logged in or the last time they performed a specific action.
     """
-    
+
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     last_activity = models.DateTimeField(auto_now=True)
 
